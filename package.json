@@ -1,0 +1,25 @@
+{
+  "name": "prettify-html",
+  "description": "Prettify your html",
+  "author": "John Otander",
+  "version": "0.1.0",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": "johnotander/prettify-html",
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "is-blank": "^1.1.0",
+    "is-present": "^1.0.0",
+    "is-void-element": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "*"
+  }
+}
