@@ -1,6 +1,9 @@
 # prettify-html [![Build Status](https://secure.travis-ci.org/johnotander/prettify-html.svg?branch=master)](https://travis-ci.org/johnotander/prettify-html) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-Prettify your html
+
+__Work in progress__
+
+Prettify your html.
 
 ## Installation
 
@@ -13,7 +16,7 @@ npm install --save prettify-html
 ```javascript
 var prettifyHtml = require('prettify-html')
 
-prettifyHtml()  // => true
+prettifyHtml(myHtmlString)
 ```
 
 ## License
