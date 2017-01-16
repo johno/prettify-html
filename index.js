@@ -20,13 +20,13 @@ const INDENTATION_CHARS = '  '
 
 module.exports = (html, options = {}) => {
   const root = load(html).root()
-  const prettyHtml = ''
+  const elements = []
 
-  root.children().each((_, el) => {
-    console.log(stringify(el, 0).trim())
-  })
+  root
+    .children()
+    .each((_, el) => elements.push(el))
 
-  return html.toString()
+  return elements.map(stringify).join("\n")
 }
 
 const stringify = (el, indentLevel = 0) => {
