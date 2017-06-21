@@ -36,7 +36,7 @@ const stringify = (el, indentLevel = 0) => {
       const voidHtml = [`<${el.name}`, attrs, '/>'].filter(Boolean).join(' ')
       return indent(indentLevel, voidHtml)
     } else {
-      const allTextChildren = el.children.length === 1 && el.children[0].type === 'text'
+      const allTextChildren = !el.children.map(c => c.type).filter(t => t !== 'text').length
 
       const open = attrs ? `<${el.name} ${attrs}>` : `<${el.name}>`
       const close = `</${el.name}>`
