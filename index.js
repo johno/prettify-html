@@ -26,18 +26,28 @@ module.exports = (html, options = {}) => {
     .children()
     .each((_, el) => elements.push(el))
 
-  return elements.map(stringify).join("\n")
+  return elements.map(el => stringify(el)).join("\n")
 }
 
 const stringify = (el, indentLevel = 0) => {
   if (el.children) {
+    const attrs = stringifyAttrs(el)
     if (isVoidElement(el.name)) {
-      return indent(indentLevel, `<${el.name} ${stringifyAttrs(el)} />`)
+      const voidHtml = [`<${el.name}`, attrs, '/>'].filter(Boolean).join(' ')
+      return indent(indentLevel, voidHtml)
     } else {
-      const open = `<${el.name} ${stringifyAttrs(el)}>`
-      const children = el.children.map(c => stringify(c, indentLevel + 1)).filter(isPresent).join("\n")
+      const allTextChildren = !el.children.map(c => c.type).filter(t => t !== 'text').length
+
+      const open = attrs ? `<${el.name} ${attrs}>` : `<${el.name}>`
       const close = `</${el.name}>`
 
+      if (allTextChildren) {
+        return indent(indentLevel, [open, el.children[0].data, close].join(''))
+      }
+
+      const children = el.children.map(
+        c => stringify(c, indentLevel + 1)
+      ).filter(isPresent).join("\n")
       return [
         indent(indentLevel, open),
         children,
@@ -49,13 +59,6 @@ const stringify = (el, indentLevel = 0) => {
   }
 }
 
-const indent = (level, str = '') => {
-  let indentStr = ''
-  for (let i = 0; i < level; i++) {
-    indentStr += INDENTATION_CHARS
-  }
-
-  return `${indentStr}${str}`
-}
+const indent = (level = 0, str = '') => `${Array(level + 1).join(INDENTATION_CHARS)}${str}`
 
 const stringifyAttrs = el => Object.keys(el.attribs).map(attr => `${attr}="${el.attribs[attr]}"`).join(' ')
