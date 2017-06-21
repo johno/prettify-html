@@ -26,7 +26,7 @@ module.exports = (html, options = {}) => {
     .children()
     .each((_, el) => elements.push(el))
 
-  return elements.map(stringify).join("\n")
+  return elements.map(el => stringify(el)).join("\n")
 }
 
 const stringify = (el, indentLevel = 0) => {
