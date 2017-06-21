@@ -42,7 +42,8 @@ const stringify = (el, indentLevel = 0) => {
       const close = `</${el.name}>`
 
       if (allTextChildren) {
-        return indent(indentLevel, [open, el.children[0].data, close].join(''))
+        const firstChild = el.children[0] || { data: '' }
+        return indent(indentLevel, [open, firstChild.data, close].join(''))
       }
 
       const children = el.children.map(
