@@ -31,12 +31,15 @@ module.exports = (html, options = {}) => {
 
 const stringify = (el, indentLevel = 0) => {
   if (el.children) {
+    const attrs = stringifyAttrs(el)
     if (isVoidElement(el.name)) {
-      return [`<${el.name}`, stringifyAttrs(el), '/>'].filter(Boolean).join(' ')
+      const voidHtml = [`<${el.name}`, attrs, '/>'].filter(Boolean).join(' ')
+      return indent(indentLevel, voidHtml)
     } else {
-      const attrs = stringifyAttrs(el)
-      const open = attrs ? `<${el.name} ${stringifyAttrs(el)}>` : `<${el.name}>`
-      const children = el.children.map(c => stringify(c, indentLevel + 1)).filter(isPresent).join("\n")
+      const open = attrs ? `<${el.name} ${attrs}>` : `<${el.name}>`
+      const children = el.children.map(
+        c => stringify(c, indentLevel + 1)
+      ).filter(isPresent).join("\n")
       const close = `</${el.name}>`
 
       return [
