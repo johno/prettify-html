@@ -53,13 +53,6 @@ const stringify = (el, indentLevel = 0) => {
   }
 }
 
-const indent = (level, str = '') => {
-  let indentStr = ''
-  for (let i = 0; i < level; i++) {
-    indentStr += INDENTATION_CHARS
-  }
-
-  return `${indentStr}${str}`
-}
+const indent = (level = 0, str = '') => `${Array(level + 1).join(INDENTATION_CHARS)}${str}`
 
 const stringifyAttrs = el => Object.keys(el.attribs).map(attr => `${attr}="${el.attribs[attr]}"`).join(' ')
