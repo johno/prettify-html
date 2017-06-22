@@ -19,17 +19,14 @@ const SKIP_CONTENT_FORMAT = [
 const INDENTATION_CHARS = '  '
 
 module.exports = (html, options = {}) => {
-  const root = load(html).root()
+  const $parser = load(html, { decodeEntities: false })
+  const root = $parser.root()
   const elements = []
 
-  root
-    .children()
-    .each((_, el) => elements.push(el))
-
-  return elements.map(el => stringify(el)).join("\n")
+  return root.children().map((_, el) => stringify(el, 0, $parser)).get().join('\n')
 }
 
-const stringify = (el, indentLevel = 0) => {
+const stringify = (el, indentLevel = 0, $parser) => {
   if (el.children) {
     const attrs = stringifyAttrs(el)
     if (isVoidElement(el.name)) {
@@ -41,16 +38,17 @@ const stringify = (el, indentLevel = 0) => {
       const open = attrs ? `<${el.name} ${attrs}>` : `<${el.name}>`
       const close = `</${el.name}>`
 
-      if (allTextChildren) {
-        let contents = el.children.map(c => c.data).join('')
-        if (!SKIP_CONTENT_FORMAT.includes(el.tagName)) {
-          contents = collapseWhitespace(contents)
-        }
-        return indent(indentLevel, [open, contents, close].join(''))
+      let innerHtml = ''
+      if (SKIP_CONTENT_FORMAT.includes(el.tagName)) {
+        innerHtml = $parser(el).html()
+        return indent(indentLevel, [open, innerHtml, close].join(''))
+      } else if (allTextChildren) {
+        innerHtml = collapseWhitespace(el.children.map(c => c.data).join(''))
+        return indent(indentLevel, [open, innerHtml, close].join(''))
       }
 
       const children = el.children.map(
-        c => stringify(c, indentLevel + 1)
+        c => stringify(c, indentLevel + 1, $parser)
       ).filter(isPresent).join("\n")
       return [
         indent(indentLevel, open),
