@@ -42,8 +42,11 @@ const stringify = (el, indentLevel = 0) => {
       const close = `</${el.name}>`
 
       if (allTextChildren) {
-        const firstChild = el.children[0] || { data: '' }
-        return indent(indentLevel, [open, firstChild.data, close].join(''))
+        let contents = el.children.map(c => c.data).join('')
+        if (!SKIP_CONTENT_FORMAT.includes(el.tagName)) {
+          contents = collapseWhitespace(contents)
+        }
+        return indent(indentLevel, [open, contents, close].join(''))
       }
 
       const children = el.children.map(
@@ -61,5 +64,8 @@ const stringify = (el, indentLevel = 0) => {
 }
 
 const indent = (level = 0, str = '') => `${Array(level + 1).join(INDENTATION_CHARS)}${str}`
+const collapseWhitespace = (content = '') => (
+  content.replace(/(\s)/g, ' ').replace(/(\s{2,})/g, ' ')
+)
 
 const stringifyAttrs = el => Object.keys(el.attribs).map(attr => `${attr}="${el.attribs[attr]}"`).join(' ')
