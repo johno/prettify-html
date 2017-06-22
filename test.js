@@ -1,7 +1,49 @@
 import test from 'ava'
 import prettifyHtml from './'
 
-test('prettify-html makes the html pretty', t => {
+test('zero-out initial indentation', t => {
+  const INPUT = `        <div>Indented Text</div>`
+  const EXPECTED = '<div>Indented Text</div>'
+  t.is(prettifyHtml(INPUT), EXPECTED)
+})
+test('siblings at top-level are consistently indended', t => {
+  const INPUT = `
+    <div>First</div><div>Second</div>
+<div>Third</div>
+  `
+  const EXPECTED = [
+    '<div>First</div>',
+    '<div>Second</div>',
+    '<div>Third</div>',
+  ].join('\n')
+
+  t.is(prettifyHtml(INPUT), EXPECTED)
+})
+test('elements containing only text are trimmed/inlined', t => {
+  const INPUT = `
+    <div>   A bunch
+    of text
+
+    inside this element
+            </div>
+  `
+  const EXPECTED = `<div> A bunch of text inside this element </div>`
+  t.is(prettifyHtml(INPUT), EXPECTED)
+})
+
+
+test('innerHTML of code/pre blocks is not altered', t => {
+  const INPUT = `<code>
+    jQuery('selector').on('event', () => {
+      // Comment
+      window.alert('an alert');
+    })
+</code>`
+
+  t.is(prettifyHtml(INPUT), INPUT)
+})
+
+test.skip('prettify-html makes the html pretty', t => {
   const INPUT = `
 	<div class="dt-m dt-l ph2 pv4 pv5-l w-100 white bg-aqua-gradient">
     <div class="dn dtc-m dtc-l v-mid pa3 w-50">
