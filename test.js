@@ -50,6 +50,26 @@ test('code/pre elements containing other XML tags are not altered', t => {
 })
 
 
+test('phrasing-content preserves location', t => {
+  const INPUT = `<p>
+      foo bar
+    baz
+      <span>
+          qux
+      </span>
+</p>`
+
+  const OUTPUT = `<p>
+  foo bar baz
+  <span>
+    qux
+  </span>
+</p>`
+
+  t.is(prettifyHtml(INPUT), INPUT)
+})
+
+
 test('prettify-html makes the html pretty', t => {
   const INPUT = `
 	<div class="dt-m dt-l ph2 pv4 pv5-l w-100 white bg-aqua-gradient">
