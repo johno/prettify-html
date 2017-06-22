@@ -2,7 +2,7 @@
   "name": "prettify-html",
   "description": "Prettify your html",
   "author": "John Otander",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "files": [
     "index.js"
