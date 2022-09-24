@@ -19,7 +19,7 @@ const SKIP_CONTENT_FORMAT = [
 const INDENTATION_CHARS = '  '
 
 module.exports = (html, options = {}) => {
-  const $parser = load(html, { decodeEntities: false })
+  const $parser = load(html, { decodeEntities: false, _useHtmlParser2: true }, false)
   const root = $parser.root()
   const elements = []
 

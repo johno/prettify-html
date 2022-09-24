@@ -14,7 +14,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "cheerio": "^0.22.0",
+    "cheerio": "^1.0.0-rc.12",
     "is-blank": "^1.1.0",
     "is-present": "^1.0.0",
     "is-void-element": "^1.0.0"
